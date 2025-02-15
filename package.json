@@ -1,5 +1,11 @@
 {
 	"name": "json-web-encryption",
 	"version": "1.0.0",
-	"type": "module"
+	"type": "module",
+	"devDependencies": {
+		"@types/node": "^22.13.4",
+		"prettier": "3.5.1",
+		"tsx": "^4.19.2",
+		"typescript": "^5.7.3"
+	}
 }
