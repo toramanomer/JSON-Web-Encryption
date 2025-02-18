@@ -1,3 +1,4 @@
+import { Buffer } from 'node:buffer'
 import { describe, it, expect } from 'vitest'
 import { toBase64Url } from './toBase64Url.js'
 

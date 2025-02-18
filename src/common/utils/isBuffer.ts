@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer'
+
 /**
  * Checks if a value is a Buffer
  */

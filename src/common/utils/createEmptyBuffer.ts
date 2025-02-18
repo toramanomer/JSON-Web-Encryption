@@ -1,3 +1,5 @@
+import { Buffer } from 'node:buffer'
+
 /**
  * Creates an empty octet
  */
