@@ -4,7 +4,7 @@
 	"endOfLine": "lf",
 	"experimentalOperatorPosition": "end",
 	"experimentalTernaries": true,
-	"objectWrap": "preserve",
+	"objectWrap": "collapse",
 	"printWidth": 80,
 	"quoteProps": "consistent",
 	"semi": false,
