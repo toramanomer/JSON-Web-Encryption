@@ -1,3 +1,5 @@
+import { hashAlgs } from './hashAlgs.js'
+
 export const encHeaderParameterValues = Object.freeze({
 	'A128CBC-HS256': 'A128CBC-HS256',
 	'A192CBC-HS384': 'A192CBC-HS384',
@@ -15,7 +17,7 @@ export const encHeaderParameters = Object.freeze({
 		keyBytes: 32,
 		encKeyBytes: 16,
 		macKeyBytes: 16,
-		hmacHashAlg: 'sha256',
+		hmacHashAlg: hashAlgs.sha256,
 		authTagBytes: 16,
 		ivBytes: 16
 	}),
@@ -24,7 +26,7 @@ export const encHeaderParameters = Object.freeze({
 		keyBytes: 48,
 		encKeyBytes: 24,
 		macKeyBytes: 24,
-		hmacHashAlg: 'sha384',
+		hmacHashAlg: hashAlgs.sha384,
 		authTagBytes: 24,
 		ivBytes: 16
 	}),
@@ -33,7 +35,7 @@ export const encHeaderParameters = Object.freeze({
 		keyBytes: 64,
 		encKeyBytes: 32,
 		macKeyBytes: 32,
-		hmacHashAlg: 'sha512',
+		hmacHashAlg: hashAlgs.sha512,
 		authTagBytes: 32,
 		ivBytes: 16
 	}),
