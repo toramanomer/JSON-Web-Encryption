@@ -1,6 +1,11 @@
 {
 	"name": "json-web-encryption",
 	"version": "1.0.0",
+	"keywords": [
+		"jwe",
+		"json web encryption",
+		"node"
+	],
 	"type": "module",
 	"devDependencies": {
 		"@types/node": "^22.13.4",
