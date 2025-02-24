@@ -1,16 +1,12 @@
 import { Buffer } from 'node:buffer'
 import { isKeyObject } from 'node:util/types'
-import {
-	KeyObject,
-	createSecretKey,
-	diffieHellman,
-	generateKeyPairSync
-} from 'node:crypto'
+import { KeyObject, createSecretKey, generateKeyPairSync } from 'node:crypto'
 import { createEmptyBuffer } from '../../common/utils/createEmptyBuffer.js'
 import { EncHeaderParameterValues } from '../../common/constants/enc.js'
 import { concatKdf } from '../../common/crypto/concatKdf.js'
 import { lengthPrefixed } from '../../common/utils/lengthPrefixed.js'
 import { AlgHeaderParameter } from '../../common/constants/index.js'
+import { computeAgreedKey } from '../../common/crypto/computeAgreedKey.js'
 
 type EcdhEsKeyAgreementInput = {
 	recipientPublicKey: KeyObject
@@ -40,7 +36,7 @@ export const ecdhEsKeyAgreement = ({
 		throw new Error('The curve algorithm is not supported')
 
 	const { privateKey, publicKey } = generateKeyPairSync('ec', { namedCurve })
-	const sharedSecret = diffieHellman({
+	const sharedSecret = computeAgreedKey({
 		privateKey,
 		publicKey: recipientPublicKey
 	})
