@@ -14,7 +14,7 @@ export type EncHeaderParameterValues = keyof typeof encHeaderParameterValues
 export const encHeaderParameters = Object.freeze({
 	[encHeaderParameterValues['A128CBC-HS256']]: Object.freeze({
 		aesAlg: 'aes-128-cbc',
-		keyBytes: 32,
+		cekBytes: 32,
 		encKeyBytes: 16,
 		macKeyBytes: 16,
 		hmacHashAlg: hashAlgs.sha256,
@@ -23,7 +23,7 @@ export const encHeaderParameters = Object.freeze({
 	}),
 	[encHeaderParameterValues['A192CBC-HS384']]: Object.freeze({
 		aesAlg: 'aes-192-cbc',
-		keyBytes: 48,
+		cekBytes: 48,
 		encKeyBytes: 24,
 		macKeyBytes: 24,
 		hmacHashAlg: hashAlgs.sha384,
@@ -32,7 +32,7 @@ export const encHeaderParameters = Object.freeze({
 	}),
 	[encHeaderParameterValues['A256CBC-HS512']]: Object.freeze({
 		aesAlg: 'aes-256-cbc',
-		keyBytes: 64,
+		cekBytes: 64,
 		encKeyBytes: 32,
 		macKeyBytes: 32,
 		hmacHashAlg: hashAlgs.sha512,
