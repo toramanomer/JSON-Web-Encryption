@@ -7,22 +7,22 @@ import {
 	generateKeyPairSync
 } from 'node:crypto'
 import { createEmptyBuffer } from '../../common/utils/createEmptyBuffer.js'
-import {
-	encHeaderParameters,
-	EncHeaderParameterValues
-} from '../../common/constants/enc.js'
+import { EncHeaderParameterValues } from '../../common/constants/enc.js'
 import { concatKdf } from '../../common/crypto/concatKdf.js'
 import { lengthPrefixed } from '../../common/utils/lengthPrefixed.js'
+import { AlgHeaderParameter } from '../../common/constants/index.js'
 
 type EcdhEsKeyAgreementInput = {
 	recipientPublicKey: KeyObject
-	enc: EncHeaderParameterValues
+	derivedKeyBits: number
+	enc: EncHeaderParameterValues | AlgHeaderParameter
 	apu?: string
 	apv?: string
 }
 
 export const ecdhEsKeyAgreement = ({
 	recipientPublicKey,
+	derivedKeyBits,
 	enc,
 	apu,
 	apv
@@ -44,9 +44,6 @@ export const ecdhEsKeyAgreement = ({
 		privateKey,
 		publicKey: recipientPublicKey
 	})
-
-	const { cekBytes } = encHeaderParameters[enc]
-	const derivedKeyBits = cekBytes * 8
 
 	const algorithmId = lengthPrefixed(Buffer.from(enc))
 	const partyUInfo = lengthPrefixed(

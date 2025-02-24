@@ -1,5 +1,8 @@
 import { KeyObject, randomBytes } from 'node:crypto'
-import { type EncHeaderParameterValues } from '../common/constants/enc.js'
+import {
+	encHeaderParameters,
+	type EncHeaderParameterValues
+} from '../common/constants/enc.js'
 import {
 	type AlgHeaderParameter,
 	algHeaderParameters
@@ -7,7 +10,7 @@ import {
 
 import { aesGcmKeyWrapAlgs, aesKeyWrapAlgs } from '../common/constants/alg.js'
 
-import { generateCek } from './generateCek.js'
+import { generateRandomCek } from './generateRandomCek.js'
 
 import { aesKeyWrap } from './key_wrapping/aesKeyWrap.js'
 import { aesGcmKeyWrap } from './key_wrapping/aesGcmKeyWrap.js'
@@ -15,6 +18,7 @@ import { pbes2KeyWrap } from './key_wrapping/pbes2KeyWrap.js'
 import { rsaOaepCekEncrypt } from './key_encryption/rsaOaepCekEncrypt.js'
 import { ecdhEsKeyAgreement } from './direct_key_agreement/ecdhEsKeyAgreement.js'
 import { directKeyEncryption } from './direct_encryption/directKeyEncryption.js'
+import { ecdhEsKeyAgreementWithKeyWrap } from './key_agreement_with_key_wrapping/ecdhEsKeyAgreementWithKeyWrap.js'
 
 type GenerateCekInput = {
 	alg: AlgHeaderParameter
@@ -48,7 +52,7 @@ export const handleKeyManagement = ({
 		case algHeaderParameters.A128KW:
 		case algHeaderParameters.A192KW:
 		case algHeaderParameters.A256KW: {
-			const cek = generateCek(enc)
+			const cek = generateRandomCek(enc)
 			const { aesAlg } = aesKeyWrapAlgs[alg]
 			const { jweEncryptedKey } = aesKeyWrap({
 				aesAlg,
@@ -62,7 +66,7 @@ export const handleKeyManagement = ({
 		case algHeaderParameters.A128GCMKW:
 		case algHeaderParameters.A192GCMKW:
 		case algHeaderParameters.A256GCMKW: {
-			const cek = generateCek(enc)
+			const cek = generateRandomCek(enc)
 			const { aesAlg } = aesGcmKeyWrapAlgs[alg]
 			const { jweEncryptedKey, additionalHeaderParams } = aesGcmKeyWrap({
 				aesAlg,
@@ -76,7 +80,7 @@ export const handleKeyManagement = ({
 		case algHeaderParameters['PBES2-HS256+A128KW']:
 		case algHeaderParameters['PBES2-HS384+A192KW']:
 		case algHeaderParameters['PBES2-HS512+A256KW']: {
-			const cek = generateCek(enc)
+			const cek = generateRandomCek(enc)
 			const { jweEncryptedKey, additionalHeaderParams } = pbes2KeyWrap({
 				password: key.export(),
 				cek: cek.export(),
@@ -90,7 +94,7 @@ export const handleKeyManagement = ({
 		// Key Encryption
 		case algHeaderParameters['RSA-OAEP']:
 		case algHeaderParameters['RSA-OAEP-256']: {
-			const cek = generateCek(enc)
+			const cek = generateRandomCek(enc)
 			const { jweEncryptedKey } = rsaOaepCekEncrypt({
 				alg,
 				contentEncryptionKey: key,
@@ -101,8 +105,16 @@ export const handleKeyManagement = ({
 
 		// Direct Key Agreement
 		case algHeaderParameters['ECDH-ES']: {
+			const { cekBytes } = encHeaderParameters[enc]
+			const derivedKeyBits = cekBytes * 8
 			const { cek, jweEncryptedKey, additionalHeaderParams } =
-				ecdhEsKeyAgreement({ recipientPublicKey: key, enc, apu, apv })
+				ecdhEsKeyAgreement({
+					recipientPublicKey: key,
+					derivedKeyBits,
+					enc,
+					apu,
+					apv
+				})
 			return { cek, jweEncryptedKey, additionalHeaderParams }
 		}
 
@@ -110,7 +122,16 @@ export const handleKeyManagement = ({
 		case algHeaderParameters['ECDH-ES+A128KW']:
 		case algHeaderParameters['ECDH-ES+A192KW']:
 		case algHeaderParameters['ECDH-ES+A256KW']: {
-			throw new Error('Not implemented yet')
+			const cek = generateRandomCek(enc)
+			const { jweEncryptedKey, additionalHeaderParams } =
+				ecdhEsKeyAgreementWithKeyWrap({
+					recipientPublicKey: key,
+					alg,
+					cek,
+					apu,
+					apv
+				})
+			return { cek, jweEncryptedKey, additionalHeaderParams }
 		}
 
 		// Direct Encryption

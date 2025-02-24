@@ -16,7 +16,7 @@ import { generateHmacKey } from '../common/crypto/generateHmacKey.js'
  *
  * @throws {TypeError} If the provided encryption algorithm is not supported.
  */
-export const generateCek = (enc: EncHeaderParameterValues): KeyObject => {
+export const generateRandomCek = (enc: EncHeaderParameterValues): KeyObject => {
 	switch (enc) {
 		// AES-CBC with HMAC authentication (AES_CBC_HMAC_SHA2)
 		case encHeaderParameterValues['A128CBC-HS256']:
