@@ -44,3 +44,18 @@ export const pbes2KeyWrapAlgs = Object.freeze({
 		aesAlg: 'aes256-wrap'
 	})
 })
+
+export const ecdhEsKeyAgreementWithKeyWrapAlgs = Object.freeze({
+	'ECDH-ES+A128KW': Object.freeze({
+		aesAlg: aesKeyWrapAlgs.A128KW.aesAlg,
+		derivedKeyBits: 128
+	}),
+	'ECDH-ES+A192KW': Object.freeze({
+		aesAlg: aesKeyWrapAlgs.A192KW.aesAlg,
+		derivedKeyBits: 192
+	}),
+	'ECDH-ES+A256KW': Object.freeze({
+		aesAlg: aesKeyWrapAlgs.A256KW.aesAlg,
+		derivedKeyBits: 256
+	})
+})
