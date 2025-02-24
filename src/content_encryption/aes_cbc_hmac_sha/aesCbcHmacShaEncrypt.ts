@@ -61,7 +61,7 @@ export const aesCbcHmacShaEncrypt = ({
 		encKeyBytes,
 		hmacHashAlg,
 		authTagBytes,
-		keyBytes,
+		cekBytes,
 		ivBytes
 	} = cbcParams[aesAlg]
 
@@ -73,9 +73,9 @@ export const aesCbcHmacShaEncrypt = ({
 		throw new TypeError('cipherKey must be a KeyObject.')
 	if (cipherKey.type !== 'secret')
 		throw new TypeError('cipherKey must be a symmetric key.')
-	if (cipherKey.symmetricKeySize !== keyBytes)
+	if (cipherKey.symmetricKeySize !== cekBytes)
 		throw new RangeError(
-			`Invalid key length for ${aesAlg}: expected ${keyBytes} bytes.`
+			`Invalid key length for ${aesAlg}: expected ${cekBytes} bytes.`
 		)
 
 	// Validate IV
